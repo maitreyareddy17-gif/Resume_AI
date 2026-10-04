@@ -17,10 +17,7 @@ openpyxl
 requests
 spacy
 pypdf
-selenium
 numpy
-webdriver-manager
-chromedriver-autoinstaller
 google-generativeai
 pdf2image
 pytesseract

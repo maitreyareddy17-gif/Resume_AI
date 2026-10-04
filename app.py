@@ -1,16 +1,10 @@
-﻿"""
+"""
 Smart Resume AI - Main Application
 """
 import time
 from PIL import Image
-from jobs.job_search import render_job_search
 from datetime import datetime
-from ui_components import (
-    apply_modern_styles, hero_section, feature_card, about_section,
-    page_header, render_analytics_section, render_activity_section,
-    render_suggestions_section
-)
-from feedback.feedback import FeedbackManager
+from ui_components import apply_modern_styles, page_header
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Inches, Pt
 from docx import Document
@@ -72,20 +66,16 @@ class ResumeApp:
 
         # Initialize navigation state
         if 'page' not in st.session_state:
-            st.session_state.page = 'home'
+            st.session_state.page = 'dashboard'
 
         # Initialize admin state
         if 'is_admin' not in st.session_state:
             st.session_state.is_admin = False
 
         self.pages = {
-            "🏠 HOME": self.render_home,
-            "🔍 RESUME ANALYZER": self.render_analyzer,
-            "📝 RESUME BUILDER": self.render_builder,
             "📊 DASHBOARD": self.render_dashboard,
-            "🎯 JOB SEARCH": self.render_job_search,
-            "💬 FEEDBACK": self.render_feedback_page,
-            "ℹ️ ABOUT": self.render_about
+            "🔍 RESUME ANALYZER": self.render_analyzer,
+            "📝 RESUME BUILDER": self.render_builder
         }
 
         # Initialize dashboard manager
@@ -466,37 +456,12 @@ class ResumeApp:
         
     def add_footer(self):
         """Add a footer to all pages"""
-        st.markdown("<hr style='margin-top: 50px; margin-bottom: 20px;'>", unsafe_allow_html=True)
-        
-        col1, col2, col3 = st.columns([1, 3, 1])
-        
-        with col2:
-            # GitHub star button with lottie animation
-            st.markdown("""
-            <div style='display: flex; justify-content: center; align-items: center; margin-bottom: 10px;'>
-                <a href='https://github.com/Hunterdii/Smart-AI-Resume-Analyzer' target='_blank' style='text-decoration: none;'>
-                    <div style='display: flex; align-items: center; background-color: #24292e; padding: 5px 10px; border-radius: 5px; transition: all 0.3s ease;'>
-                        <svg height="16" width="16" viewBox="0 0 16 16" version="1.1" style='margin-right: 5px;'>
-                            <path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" fill="gold"></path>
-                        </svg>
-                        <span style='color: white; font-size: 14px;'>Star this repo</span>
-                    </div>
-                </a>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Footer text
-            st.markdown("""
-            <p style='text-align: center;'>
-                Powered by <b>Streamlit</b> and <b>Google Gemini AI</b> | Developed by 
-                <a href="https://www.linkedin.com/in/patel-hetkumar-sandipbhai-8b110525a/" target="_blank" style='text-decoration: none; color: #FFFFFF'>
-                    <b>Het Patel (Hunterdii)</b>
-                </a>
-            </p>
-            <p style='text-align: center; font-size: 12px; color: #888888;'>
-                "Every star counts! If you find this project helpful, please consider starring the repo to help it reach more people."
-            </p>
-            """, unsafe_allow_html=True)
+        st.markdown("<hr style='margin-top: 50px; margin-bottom: 20px; border-color: #333;'>", unsafe_allow_html=True)
+        st.markdown("""
+        <div style='text-align: center; color: #888888; font-size: 13px; padding-bottom: 20px;'>
+            <p style='margin: 0;'><b>Smart Resume AI</b> • Resume Analyzer, Resume Builder & Analytics Dashboard</p>
+        </div>
+        """, unsafe_allow_html=True)
 
     def load_image(self, image_name):
         """Load image from static directory"""
@@ -546,8 +511,6 @@ class ResumeApp:
     def render_dashboard(self):
         """Render the dashboard page"""
         self.dashboard_manager.render_dashboard()
-
-        st.toast("Check out these repositories: [Awesome Hacking](https://github.com/Hunterdii/Awesome-Hacking)", icon="ℹ️")
 
 
     def render_empty_state(self, icon, message):
@@ -1000,247 +963,6 @@ class ResumeApp:
                 print(f"Error preparing resume data: {str(e)}")
                 print(f"Full traceback: {traceback.format_exc()}")
                 st.error(f"❌ Error preparing resume data: {str(e)}")
-
-        st.toast("Check out these repositories: [30-Days-Of-Rust](https://github.com/Hunterdii/30-Days-Of-Rust)", icon="ℹ️")
-
-    def render_about(self):
-        """Render the about page"""
-        # Apply modern styles
-        from ui_components import apply_modern_styles
-        import base64
-        import os
-
-        # Function to load image as base64
-        def get_image_as_base64(file_path):
-            try:
-                with open(file_path, "rb") as image_file:
-                    encoded = base64.b64encode(image_file.read()).decode()
-                    return f"data:image/jpeg;base64,{encoded}"
-            except:
-                return None
-
-        # Get image path and convert to base64
-        image_path = os.path.join(
-    os.path.dirname(__file__),
-    "assets",
-     "124852522.jpeg")
-        image_base64 = get_image_as_base64(image_path)
-
-        apply_modern_styles()
-
-        # Add Font Awesome icons and custom CSS
-        st.markdown("""
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-            <style>
-                .profile-section, .vision-section, .feature-card {
-                    text-align: center;
-                    padding: 2rem;
-                    background: rgba(45, 45, 45, 0.9);
-                    border-radius: 20px;
-                    margin: 2rem auto;
-                    max-width: 800px;
-                }
-
-                .profile-image {
-                    width: 200px;
-                    height: 200px;
-                    border-radius: 50%;
-                    margin: 0 auto 1.5rem;
-                    display: block;
-                    object-fit: cover;
-                    border: 4px solid #4CAF50;
-                }
-
-                .profile-name {
-                    font-size: 2.5rem;
-                    color: white;
-                    margin-bottom: 0.5rem;
-                }
-
-                .profile-title {
-                    font-size: 1.2rem;
-                    color: #4CAF50;
-                    margin-bottom: 1.5rem;
-                }
-
-                .social-links {
-                    display: flex;
-                    justify-content: center;
-                    gap: 1.5rem;
-                    margin: 2rem 0;
-                }
-
-                .social-link {
-                    font-size: 2rem;
-                    color: #4CAF50;
-                    transition: all 0.3s ease;
-                    padding: 0.5rem;
-                    border-radius: 50%;
-                    background: rgba(76, 175, 80, 0.1);
-                    width: 60px;
-                    height: 60px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    text-decoration: none;
-                }
-
-                .social-link:hover {
-                    transform: translateY(-5px);
-                    background: #4CAF50;
-                    color: white;
-                    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-                }
-
-                .bio-text {
-                    color: #ddd;
-                    line-height: 1.8;
-                    font-size: 1.1rem;
-                    margin-top: 2rem;
-                    text-align: left;
-                }
-
-                .vision-text {
-                    color: #ddd;
-                    line-height: 1.8;
-                    font-size: 1.1rem;
-                    font-style: italic;
-                    margin: 1.5rem 0;
-                    text-align: left;
-                }
-
-                .vision-icon {
-                    font-size: 2.5rem;
-                    color: #4CAF50;
-                    margin-bottom: 1rem;
-                }
-
-                .vision-title {
-                    font-size: 2rem;
-                    color: white;
-                    margin-bottom: 1rem;
-                }
-
-                .features-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                    gap: 2rem;
-                    margin: 2rem auto;
-                    max-width: 1200px;
-                }
-
-                .feature-card {
-                    padding: 2rem;
-                    margin: 0;
-                }
-
-                .feature-icon {
-                    font-size: 2.5rem;
-                    color: #4CAF50;
-                    margin-bottom: 1rem;
-                }
-
-                .feature-title {
-                    font-size: 1.5rem;
-                    color: white;
-                    margin: 1rem 0;
-                }
-
-                .feature-description {
-                    color: #ddd;
-                    line-height: 1.6;
-                }
-            </style>
-        """, unsafe_allow_html=True)
-
-        # Hero Section
-        st.markdown("""
-            <div class="hero-section">
-                <h1 class="hero-title">About Smart Resume AI</h1>
-                <p class="hero-subtitle">A powerful AI-driven platform for optimizing your resume</p>
-            </div>
-        """, unsafe_allow_html=True)
-
-        # Profile Section
-        st.markdown(f"""
-            <div class="profile-section">
-                <img src="{image_base64 if image_base64 else 'https://avatars.githubusercontent.com/Hunterdii'}"
-                     alt="Het Patel"
-                     class="profile-image"
-                     onerror="this.onerror=null; this.src='https://avatars.githubusercontent.com/Hunterdii';">
-                <h2 class="profile-name">Het Patel (Hunterdii)</h2>
-                <p class="profile-title">Full Stack Developer & AI/ML Enthusiast</p>
-                <div class="social-links">
-                    <a href="https://github.com/Hunterdii" class="social-link" target="_blank">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/patel-hetkumar-sandipbhai-8b110525a/" class="social-link" target="_blank">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="mailto:hunterdii9879@gmail.com" class="social-link" target="_blank">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </div>
-                <p class="bio-text">
-                    Hello! I'm a passionate Full Stack Developer with expertise in AI and Machine Learning.
-                    I created Smart Resume AI to revolutionize how job seekers approach their career journey.
-                    With my background in both software development and AI, I've designed this platform to
-                    provide intelligent, data-driven insights for resume optimization.
-                </p>
-            </div>
-        """, unsafe_allow_html=True)
-
-
-
-
-        # Vision Section
-        st.markdown("""
-            <div class="vision-section">
-                <i class="fas fa-lightbulb vision-icon"></i>
-                <h2 class="vision-title">Our Vision</h2>
-                <p class="vision-text">
-                    "Smart Resume AI represents my vision of democratizing career advancement through technology.
-                    By combining cutting-edge AI with intuitive design, this platform empowers job seekers at
-                    every career stage to showcase their true potential and stand out in today's competitive job market."
-                </p>
-            </div>
-        """, unsafe_allow_html=True)
-
-        # Features Section
-        st.markdown("""
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-robot feature-icon"></i>
-                    <h3 class="feature-title">AI-Powered Analysis</h3>
-                    <p class="feature-description">
-                        Advanced AI algorithms provide detailed insights and suggestions to optimize your resume for maximum impact.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-chart-line feature-icon"></i>
-                    <h3 class="feature-title">Data-Driven Insights</h3>
-                    <p class="feature-description">
-                        Make informed decisions with our analytics-based recommendations and industry insights.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-shield-alt feature-icon"></i>
-                    <h3 class="feature-title">Privacy First</h3>
-                    <p class="feature-description">
-                        Your data security is our priority. We ensure your information is always protected and private.
-                    </p>
-                </div>
-            </div>
-            <div style="text-align: center; margin: 3rem 0;">
-                <a href="?page=analyzer" class="cta-button">
-                    Start Your Journey
-                    <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
-                </a>
-            </div>
-        """, unsafe_allow_html=True)
-
-        st.toast("Check out these repositories: [Iriswise](https://github.com/Hunterdii/Iriswise)", icon="ℹ️")
-
     def render_analyzer(self):
         """Render the resume analyzer page"""
         apply_modern_styles()
@@ -2798,140 +2520,38 @@ class ResumeApp:
                             import traceback as tb
                             st.code(tb.format_exc())
 
-        st.toast("Check out these repositories: [Awesome Java](https://github.com/Hunterdii/Awesome-Java)", icon="ℹ️")
-
-
-    def render_home(self):
-        apply_modern_styles()
-        
-        # Hero Section
-        hero_section(
-            "Smart Resume AI",
-            "Transform your career with AI-powered resume analysis and building. Get personalized insights and create professional resumes that stand out."
-        )
-        
-        # Features Section
-        st.markdown('<div class="feature-grid">', unsafe_allow_html=True)
-        
-        feature_card(
-            "fas fa-robot",
-            "AI-Powered Analysis",
-            "Get instant feedback on your resume with advanced AI analysis that identifies strengths and areas for improvement."
-        )
-        
-        feature_card(
-            "fas fa-magic",
-            "Smart Resume Builder",
-            "Create professional resumes with our intelligent builder that suggests optimal content and formatting."
-        )
-        
-        feature_card(
-            "fas fa-chart-line",
-            "Career Insights",
-            "Access detailed analytics and personalized recommendations to enhance your career prospects."
-        )
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        st.toast("Check out these repositories: [AI-Nexus(AI/ML)](https://github.com/Hunterdii/AI-Nexus)", icon="ℹ️")
-
-        # Call-to-Action with Streamlit navigation
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            if st.button("Get Started", key="get_started_btn", 
-                        help="Click to start analyzing your resume",
-                        type="primary",
-                        width='stretch'):
-                cleaned_name = "🔍 RESUME ANALYZER".lower().replace(" ", "_").replace("🔍", "").strip()
-                st.session_state.page = cleaned_name
-                st.rerun()
-
-    def render_job_search(self):
-        """Render the job search page"""
-        render_job_search()
-
-        st.toast("Check out these repositories: [GeeksforGeeks-POTD](https://github.com/Hunterdii/GeeksforGeeks-POTD)", icon="ℹ️")
-
-
-    def render_feedback_page(self):
-        """Render the feedback page"""
-        apply_modern_styles()
-        
-        # Page Header
-        page_header(
-            "Feedback & Suggestions",
-            "Help us improve by sharing your thoughts"
-        )
-        
-        # Initialize feedback manager
-        feedback_manager = FeedbackManager()
-        
-        # Create tabs for form and stats
-        form_tab, stats_tab = st.tabs(["Submit Feedback", "Feedback Stats"])
-        
-        with form_tab:
-            feedback_manager.render_feedback_form()
-            
-        with stats_tab:
-            feedback_manager.render_feedback_stats()
-
-        st.toast("Check out these repositories: [TryHackMe Free Rooms](https://github.com/Hunterdii/tryhackme-free-rooms)", icon="ℹ️")
-
-
-    def show_repo_notification(self):
-        message = """
-<div style="background-color: #1e1e1e; border-radius: 10px; border: 1px solid #4b6cb7; padding: 10px; margin: 10px 0; color: white;">
-    <div style="margin-bottom: 10px;">Check out these other repositories:</div>
-    <div style="margin-bottom: 5px;"><b>Hacking Resources:</b></div>
-    <ul style="margin-top: 0; padding-left: 20px;">
-        <li><a href="https://github.com/Hunterdii/tryhackme-free-rooms" target="_blank" style="color: #4CAF50;">TryHackMe Free Rooms</a></li>
-        <li><a href="https://github.com/Hunterdii/Awesome-Hacking" target="_blank" style="color: #4CAF50;">Awesome Hacking</a></li>
-    </ul>
-    <div style="margin-bottom: 5px;"><b>Programming Languages:</b></div>
-    <ul style="margin-top: 0; padding-left: 20px;">
-        <li><a href="https://github.com/Hunterdii/Awesome-Java" target="_blank" style="color: #4CAF50;">Awesome Java</a></li>
-        <li><a href="https://github.com/Hunterdii/30-Days-Of-Rust" target="_blank" style="color: #4CAF50;">30 Days Of Rust</a></li>
-    </ul>
-    <div style="margin-bottom: 5px;"><b>Data Structures & Algorithms:</b></div>
-    <ul style="margin-top: 0; padding-left: 20px;">
-        <li><a href="https://github.com/Hunterdii/GeeksforGeeks-POTD" target="_blank" style="color: #4CAF50;">GeeksforGeeks POTD</a></li>
-        <li><a href="https://github.com/Hunterdii/Leetcode-POTD" target="_blank" style="color: #4CAF50;">Leetcode POTD</a></li>
-    </ul>
-    <div style="margin-bottom: 5px;"><b>AI/ML Projects:</b></div>
-    <ul style="margin-top: 0; padding-left: 20px;">
-        <li><a href="https://github.com/Hunterdii/AI-Nexus" target="_blank" style="color: #4CAF50;">AI Nexus</a></li>
-    </ul>
-    <div style="margin-top: 10px;">If you find this project helpful, please consider ⭐ starring the repo!</div>
-</div>
-"""
-        st.sidebar.markdown(message, unsafe_allow_html=True)
-
-
     def main(self):
         """Main application entry point"""
         self.apply_global_styles()
-        
+
+        def get_clean_slug(name):
+            return name.replace("📊", "").replace("🔍", "").replace("📝", "").strip().lower().replace(" ", "_")
+
         # Admin login/logout in sidebar
         with st.sidebar:
-            st_lottie(self.load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_xyadoh9h.json"), height=200, key="sidebar_animation")
+            st_lottie(self.load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_xyadoh9h.json"), height=180, key="sidebar_animation")
             st.title("Smart Resume AI")
+            st.markdown("<p style='color: #888; margin-top: -15px;'>Smart Career Suite</p>", unsafe_allow_html=True)
             st.markdown("---")
-            
+
             # Navigation buttons
+            current_page_slug = st.session_state.get('page', 'dashboard')
             for page_name in self.pages.keys():
-                if st.button(page_name, width='stretch'):
-                    cleaned_name = page_name.lower().replace(" ", "_").replace("🏠", "").replace("🔍", "").replace("📝", "").replace("📊", "").replace("🎯", "").replace("💬", "").replace("ℹ️", "").strip()
-                    st.session_state.page = cleaned_name
+                page_slug = get_clean_slug(page_name)
+                is_active = (current_page_slug == page_slug)
+                btn_type = "primary" if is_active else "secondary"
+                if st.button(page_name, width='stretch', type=btn_type, key=f"nav_{page_slug}"):
+                    st.session_state.page = page_slug
                     st.rerun()
 
-            # Add some space before admin login
-            st.markdown("<br><br>", unsafe_allow_html=True)
+            # Add space before admin login
+            st.markdown("<br>", unsafe_allow_html=True)
             st.markdown("---")
 
             # Admin Login/Logout section at bottom
             if st.session_state.get('is_admin', False):
                 st.success(f"Logged in as: {st.session_state.get('current_admin_email')}")
-                if st.button("Logout", key="logout_button"):
+                if st.button("Logout", key="logout_button", width='stretch'):
                     try:
                         log_admin_action(st.session_state.get('current_admin_email'), "logout")
                         st.session_state.is_admin = False
@@ -2944,42 +2564,35 @@ class ResumeApp:
                 with st.expander("👤 Admin Login"):
                     admin_email_input = st.text_input("Email", key="admin_email_input")
                     admin_password = st.text_input("Password", type="password", key="admin_password_input")
-                    if st.button("Login", key="login_button"):
-                            try:
-                                if verify_admin(admin_email_input, admin_password):
-                                    st.session_state.is_admin = True
-                                    st.session_state.current_admin_email = admin_email_input
-                                    log_admin_action(admin_email_input, "login")
-                                    st.success("Logged in successfully!")
-                                    st.rerun()
-                                else:
-                                    st.error("Invalid credentials")
-                            except Exception as e:
-                                st.error(f"Error during login: {str(e)}")
-        
-            # Display the repository notification in the sidebar
-            self.show_repo_notification()
+                    if st.button("Login", key="login_button", width='stretch'):
+                        try:
+                            if verify_admin(admin_email_input, admin_password):
+                                st.session_state.is_admin = True
+                                st.session_state.current_admin_email = admin_email_input
+                                log_admin_action(admin_email_input, "login")
+                                st.success("Logged in successfully!")
+                                st.rerun()
+                            else:
+                                st.error("Invalid credentials")
+                        except Exception as e:
+                            st.error(f"Error during login: {str(e)}")
 
-        # Force home page on first load
+        # Force dashboard on first load
         if 'initial_load' not in st.session_state:
             st.session_state.initial_load = True
-            st.session_state.page = 'home'
+            st.session_state.page = 'dashboard'
             st.rerun()
-        
+
         # Get current page and render it
-        current_page = st.session_state.get('page', 'home')
-        
-        # Create a mapping of cleaned page names to original names
-        page_mapping = {name.lower().replace(" ", "_").replace("🏠", "").replace("🔍", "").replace("📝", "").replace("📊", "").replace("🎯", "").replace("💬", "").replace("ℹ️", "").strip(): name 
-                       for name in self.pages.keys()}
-        
+        current_page = st.session_state.get('page', 'dashboard')
+        page_mapping = {get_clean_slug(name): name for name in self.pages.keys()}
+
         # Render the appropriate page
         if current_page in page_mapping:
             self.pages[page_mapping[current_page]]()
         else:
-            # Default to home page if invalid page
-            self.render_home()
-    
+            self.render_dashboard()
+
         # Add footer to every page
         self.add_footer()
 
